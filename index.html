@@ -99,25 +99,13 @@
             color: #00ffff;
             text-transform: uppercase;
             letter-spacing: 2px;
-            border-bottom: 2px solid #00ff00;
             padding-bottom: 0.5rem;
             position: relative;
-        }
-        
-        h1::before {
-            content: "┌─[";
-            position: absolute;
-            left: -30px;
-            top: 0;
-            color: #00ff00;
-        }
-        
-        h1::after {
-            content: "]─┐";
-            position: absolute;
-            right: -30px;
-            top: 0;
-            color: #00ff00;
+            border-bottom: 2px solid #00ff00;
+            padding-left: 30px;
+            padding-right: 30px;
+            text-align: center;
+            overflow: visible;
         }
         
         .subtitle {
@@ -127,6 +115,7 @@
             border-left: 3px solid #00ff00;
             padding-left: 15px;
             margin-top: 1rem;
+            overflow: visible;
         }
         
         h2 {
@@ -136,6 +125,8 @@
             border-bottom: 1px solid #008800;
             position: relative;
             font-size: 1.6rem;
+            overflow: visible;
+            padding-left: 0;
         }
         
         h2::before {
@@ -149,6 +140,7 @@
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
             font-size: 1.3rem;
+            overflow: visible;
         }
         
         h3::before {
@@ -164,6 +156,7 @@
             border: 1px solid #005500;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
             position: relative;
+            overflow: visible;
         }
         
         section::before {
@@ -181,6 +174,7 @@
             border: 1px solid;
             border-left-width: 5px;
             background-color: rgba(0, 20, 0, 0.5);
+            overflow: visible;
         }
         
         .note {
@@ -231,19 +225,9 @@
             border-left: 3px solid #00ff00;
             position: relative;
             box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
-        }
-        
-        pre::before {
-            content: "┌──(";
-            position: absolute;
-            top: -15px;
-            left: 10px;
-            background-color: #001100;
-            padding: 0 10px;
-            color: #00ff00;
-            font-size: 0.8rem;
-            border: 1px solid #004400;
-            border-bottom: none;
+            white-space: pre;
+            word-wrap: normal;
+            max-width: 100%;
         }
         
         code {
@@ -252,17 +236,29 @@
             padding: 0.2rem 0.4rem;
             border: 1px solid #004400;
             font-size: 0.9rem;
+            white-space: nowrap;
+            display: inline-block;
+            max-width: 100%;
+            overflow-x: auto;
         }
         
         .command {
             color: #00ffff;
             font-weight: bold;
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.3rem;
+            background-color: rgba(0, 34, 0, 0.5);
+            border-left: 3px solid #00ff00;
+            overflow-x: auto;
+            white-space: nowrap;
         }
         
         .command::before {
             content: "└─$ ";
             color: #00ff00;
             margin-right: 5px;
+            font-weight: bold;
         }
         
         .file-path {
@@ -276,6 +272,7 @@
             border: 1px dashed #008800;
             text-align: center;
             color: #00ccff;
+            overflow: visible;
         }
         
         table {
@@ -283,12 +280,15 @@
             border-collapse: collapse;
             margin: 1.5rem 0;
             border: 1px solid #004400;
+            display: block;
+            overflow-x: auto;
         }
         
         th, td {
             padding: 0.75rem;
             text-align: left;
             border: 1px solid #004400;
+            white-space: nowrap;
         }
         
         th {
@@ -314,6 +314,7 @@
             color: #008800;
             font-size: 0.9rem;
             border-top: 1px solid #004400;
+            overflow: visible;
         }
         
         .step-number {
@@ -373,20 +374,9 @@
         }
         
         .typewriter {
-            overflow: hidden;
-            border-right: .15em solid #00ff00;
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
-        
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #00ff00; }
+            overflow: visible;
+            white-space: normal;
+            border-right: none;
         }
         
         .matrix-line {
@@ -444,24 +434,96 @@
         .terminal-button.minimize { background-color: #ffaa00; }
         .terminal-button.maximize { background-color: #00cc00; }
         
+        /* Fix for code blocks to ensure text is visible */
+        pre code {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            color: #00ff00;
+            display: block;
+            white-space: pre;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        
+        /* Command display fixes */
+        .command-container {
+            background-color: #001100;
+            border: 1px solid #004400;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .command-container .prompt {
+            color: #00ff00;
+            margin-right: 0.5rem;
+        }
+        
+        .command-container .command-text {
+            color: #00ffff;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 15px;
             }
             
             h1 {
                 font-size: 1.8rem;
+                padding-left: 15px;
+                padding-right: 15px;
             }
             
             pre {
                 padding: 1rem;
                 font-size: 0.85rem;
+                margin-left: -5px;
+                margin-right: -5px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
             }
             
             section {
                 padding: 1rem;
+                margin-left: -5px;
+                margin-right: -5px;
+                border-left: none;
+                border-right: none;
             }
+            
+            .command {
+                font-size: 0.85rem;
+                padding: 0.5rem;
+            }
+            
+            table {
+                display: block;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Ensure all text is visible - no clipping */
+        * {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        /* Fix for long command lines */
+        .long-command {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0.5rem;
+            background-color: #001a00;
+            border-left: 3px solid #00ff00;
+            margin: 0.5rem 0;
         }
     </style>
 </head>
@@ -502,14 +564,25 @@
         
         <h3><span class="step-number">1</span> Verify Your Linux Mint Version</h3>
         <p>OpenVPN repositories use Ubuntu codenames. Linux Mint "Zara" is based on Ubuntu "Noble" (24.04):</p>
-        <pre><code>lsb_release -sc
-# Output: zara
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">lsb_release -sc</span>
+        </div>
+        <pre><code># Output: zara
 # Ubuntu base for Mint Zara: noble (24.04)</code></pre>
         
         <h3><span class="step-number">2</span> Install Essential Build Tools</h3>
         <p>First, update your package list and install fundamental development tools:</p>
-        <pre><code>sudo apt update
-sudo apt install build-essential git pkg-config meson ninja-build curl</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">sudo apt update</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">sudo apt install build-essential git pkg-config meson ninja-build curl</span>
+        </div>
         
         <div class="note">
             <strong>WHY THESE TOOLS MATTER:</strong>
@@ -531,16 +604,27 @@ sudo apt install build-essential git pkg-config meson ninja-build curl</code></p
         </div>
         
         <h3><span class="step-number">1</span> Clone the Source Repository</h3>
-        <pre><code>cd ~
-git clone https://codeberg.org/OpenVPN/openvpn3-linux.git
-cd openvpn3-linux</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd ~</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">git clone https://codeberg.org/OpenVPN/openvpn3-linux.git</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd openvpn3-linux</span>
+        </div>
         
         <h3><span class="step-number">2</span> Install Dependencies (First Attempt)</h3>
         <p>Based on BUILD.md documentation, install required libraries:</p>
-        <pre><code>sudo apt install libglib2.0-dev libjsoncpp-dev uuid-dev liblz4-dev \
-libcap-ng-dev libxml2-utils python3-minimal python3-dbus \
-python3-docutils python3-jinja2 libtinyxml2-dev policykit-1 \
-libsystemd-dev python3-systemd libssl-dev libdbus-1-dev</code></pre>
+        
+        <div class="long-command">
+            <span class="prompt">$</span>
+            <span class="command-text">sudo apt install libglib2.0-dev libjsoncpp-dev uuid-dev liblz4-dev libcap-ng-dev libxml2-utils python3-minimal python3-dbus python3-docutils python3-jinja2 libtinyxml2-dev policykit-1 libsystemd-dev python3-systemd libssl-dev libdbus-1-dev</span>
+        </div>
         
         <h3><span class="step-number">3</span> The Critical Missing Dependency: gdbuspp</h3>
         <p>When running <code>meson setup</code>, the build fails because <code>gdbuspp</code> is not in standard repositories. This C++ D-Bus library is essential for OpenVPN 3's service architecture.</p>
@@ -550,12 +634,31 @@ libsystemd-dev python3-systemd libssl-dev libdbus-1-dev</code></pre>
         </div>
         
         <h4>Solution: Build gdbuspp from Source</h4>
-        <pre><code>cd ~
-git clone https://codeberg.org/OpenVPN/gdbuspp.git
-cd gdbuspp
-meson setup --prefix=/usr/local _build
-meson compile -C _build
-sudo meson install -C _build</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd ~</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">git clone https://codeberg.org/OpenVPN/gdbuspp.git</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd gdbuspp</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">meson setup --prefix=/usr/local _build</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">meson compile -C _build</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">sudo meson install -C _build</span>
+        </div>
         
         <div class="note">
             <strong>UNDERSTANDING THE FIX:</strong> We install to <code>/usr/local</code> (standard for locally built software). The library installs its pkg-config file to <code>/usr/local/lib/pkgconfig/gdbuspp.pc</code>, which <code>pkg-config</code> needs to find.
@@ -563,12 +666,23 @@ sudo meson install -C _build</code></pre>
         
         <h3><span class="step-number">4</span> Missing Submodules</h3>
         <p>After fixing gdbuspp, the next error is missing ASIO library:</p>
+        
         <pre><code>meson.build:87:15: ERROR: Include dir ./vendor/asio/asio/include does not exist.</code></pre>
         
         <p><strong>Solution:</strong> Initialize and update Git submodules:</p>
-        <pre><code>cd ~/openvpn3-linux
-git submodule init
-git submodule update --recursive</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd ~/openvpn3-linux</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">git submodule init</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">git submodule update --recursive</span>
+        </div>
         
         <h3><span class="step-number">5</span> DCO Support & libnl Dependency</h3>
         <p>Data Channel Offload (DCO) is an optional kernel acceleration feature. You can disable it or install the dependency:</p>
@@ -593,15 +707,34 @@ git submodule update --recursive</code></pre>
         
         <h3><span class="step-number">6</span> Final Build Commands</h3>
         <p>After resolving all dependencies:</p>
-        <pre><code>cd ~/openvpn3-linux
-meson setup --prefix=/usr _builddir
-meson compile -C _builddir
-sudo meson install -C _builddir</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd ~/openvpn3-linux</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">meson setup --prefix=/usr _builddir</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">meson compile -C _builddir</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">sudo meson install -C _builddir</span>
+        </div>
         
         <div class="success">
             <strong>VERIFICATION:</strong> After successful installation, verify OpenVPN 3 is working:
-            <pre><code>openvpn3 --version
-openvpn2 --help</code></pre>
+            <div class="command-container">
+                <span class="prompt">$</span>
+                <span class="command-text">openvpn3 --version</span>
+            </div>
+            <div class="command-container">
+                <span class="prompt">$</span>
+                <span class="command-text">openvpn2 --help</span>
+            </div>
         </div>
     </section>
 
@@ -634,30 +767,56 @@ openvpn2 --help</code></pre>
         <h3><span class="step-number">1</span> Using VPNBook</h3>
         
         <h4>Download and Extract Configuration:</h4>
-        <pre><code>cd ~/Downloads
-wget https://www.vpnbook.com/free-openvpn-account/vpnbook-openvpn-us16.zip
-unzip vpnbook-openvpn-us16.zip
-cd vpnbook-openvpn-us16
-ls -la *.ovpn  # List available server configurations</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd ~/Downloads</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">wget https://www.vpnbook.com/free-openvpn-account/vpnbook-openvpn-us16.zip</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">unzip vpnbook-openvpn-us16.zip</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd vpnbook-openvpn-us16</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">ls -la *.ovpn  # List available server configurations</span>
+        </div>
         
         <h4>Critical Fix: Compression Compatibility</h4>
         <p>Newer OpenVPN versions reject older compression settings. You'll encounter this error:</p>
+        
         <pre><code>Could not start session: Compression is not available</code></pre>
         
         <p><strong>Solution:</strong> Edit the .ovpn file to comment out compression directives:</p>
-        <pre><code>nano vpnbook-us16-tcp443.ovpn
-# Find lines containing 'comp-lzo' or 'compress' 
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">nano vpnbook-us16-tcp443.ovpn</span>
+        </div>
+        <pre><code># Find lines containing 'comp-lzo' or 'compress' 
 # Add '#' to comment them out:
 # comp-lzo
 # Save and exit (Ctrl+X, Y, Enter)</code></pre>
         
         <h4>Connect to VPN:</h4>
-        <pre><code>openvpn3 session-start --config vpnbook-us16-tcp443.ovpn
-# When prompted:
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">openvpn3 session-start --config vpnbook-us16-tcp443.ovpn</span>
+        </div>
+        <pre><code># When prompted:
 # Auth User name: vpnbook
 # Auth Password: cr8tat4</code></pre>
         
         <h3><span class="step-number">2</span> Alternative: VPN Gate (Simpler)</h3>
+        
         <pre><code># 1. Visit https://www.vpngate.net
 # 2. Download any OpenVPN config file
 # 3. Connect (no compression fix needed):
@@ -719,16 +878,36 @@ openvpn3 session-start --config downloaded-file.ovpn
         
         <h3>Common Pitfall: Directory Issues</h3>
         <p>After restarting your computer, you might encounter:</p>
+        
         <pre><code>---- ERR_PROFILE_GENERIC: cannot open for read: vpnbook-us16-tcp443.ovpn</code></pre>
         
         <p><strong>Cause:</strong> You're not in the directory containing the .ovpn file.</p>
         <p><strong>Solution:</strong></p>
-        <pre><code># Navigate to the correct folder
-cd ~/Downloads/vpnbook-openvpn-us16
-# OR import the config once to avoid directory issues:
-openvpn3 config-import --config vpnbook-us16-tcp443.ovpn --name VPNBook --persistent
-# Then start from anywhere:
-openvpn3 session-start --config VPNBook</code></pre>
+        
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text"># Navigate to the correct folder</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">cd ~/Downloads/vpnbook-openvpn-us16</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text"># OR import the config once to avoid directory issues:</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">openvpn3 config-import --config vpnbook-us16-tcp443.ovpn --name VPNBook --persistent</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text"># Then start from anywhere:</span>
+        </div>
+        <div class="command-container">
+            <span class="prompt">$</span>
+            <span class="command-text">openvpn3 session-start --config VPNBook</span>
+        </div>
     </section>
 
     <section id="troubleshooting">
@@ -853,31 +1032,36 @@ openvpn3 session-start --config VPNBook</code></pre>
             }
         }
         
-        // Add terminal cursor effect to code blocks
+        // Add cursor effect to command containers
         function addCursorEffect() {
-            const preElements = document.querySelectorAll('pre');
-            preElements.forEach(pre => {
-                const lastLine = pre.querySelector('code');
-                if (lastLine) {
-                    // Remove existing cursor spans
-                    const existingCursor = lastLine.querySelector('.cursor');
-                    if (existingCursor) existingCursor.remove();
-                    
-                    // Add cursor to the end
-                    const cursorSpan = document.createElement('span');
-                    cursorSpan.className = 'cursor';
-                    lastLine.appendChild(cursorSpan);
-                }
+            const commandContainers = document.querySelectorAll('.command-container:last-child');
+            commandContainers.forEach(container => {
+                const existingCursor = container.querySelector('.cursor');
+                if (existingCursor) existingCursor.remove();
+                
+                const cursorSpan = document.createElement('span');
+                cursorSpan.className = 'cursor';
+                container.appendChild(cursorSpan);
             });
         }
         
-        // Add typewriter effect to headers
-        function addTypewriterEffect() {
-            const headers = document.querySelectorAll('h1, h2, h3');
-            headers.forEach(header => {
-                if (!header.classList.contains('typewriter')) {
-                    header.classList.add('typewriter');
+        // Ensure all code blocks are fully visible
+        function ensureCodeVisibility() {
+            const preElements = document.querySelectorAll('pre');
+            preElements.forEach(pre => {
+                // Reset scroll to show beginning of code
+                pre.scrollLeft = 0;
+                
+                // Add horizontal scroll indicator if content overflows
+                if (pre.scrollWidth > pre.clientWidth) {
+                    pre.style.background = 'linear-gradient(to right, #001100 95%, transparent)';
                 }
+            });
+            
+            // Ensure command containers are fully visible
+            const commandContainers = document.querySelectorAll('.command-container, .long-command');
+            commandContainers.forEach(container => {
+                container.scrollLeft = 0;
             });
         }
         
@@ -885,26 +1069,34 @@ openvpn3 session-start --config VPNBook</code></pre>
         document.addEventListener('DOMContentLoaded', function() {
             createMatrixRain();
             addCursorEffect();
-            addTypewriterEffect();
+            ensureCodeVisibility();
             
             // Update cursor position periodically
             setInterval(addCursorEffect, 1000);
             
-            // Add click effects to code blocks
-            const codeBlocks = document.querySelectorAll('pre');
-            codeBlocks.forEach(block => {
-                block.addEventListener('click', function() {
-                    this.style.boxShadow = 'inset 0 0 20px rgba(0, 255, 0, 0.3)';
-                    setTimeout(() => {
-                        this.style.boxShadow = 'inset 0 0 10px rgba(0, 255, 0, 0.1)';
-                    }, 300);
+            // Re-check code visibility on window resize
+            window.addEventListener('resize', ensureCodeVisibility);
+            
+            // Add click to scroll functionality for long commands
+            const longCommands = document.querySelectorAll('.long-command, .command-container');
+            longCommands.forEach(cmd => {
+                cmd.addEventListener('click', function(e) {
+                    if (this.scrollWidth > this.clientWidth) {
+                        // If not at end, scroll to end; if at end, scroll to beginning
+                        if (this.scrollLeft + this.clientWidth >= this.scrollWidth - 10) {
+                            this.scrollLeft = 0;
+                        } else {
+                            this.scrollLeft = this.scrollWidth;
+                        }
+                        e.preventDefault();
+                    }
                 });
             });
         });
         
         // Add glitch effect randomly
         setInterval(() => {
-            const elements = document.querySelectorAll('h1, h2, h3, .command');
+            const elements = document.querySelectorAll('h1, h2, h3');
             if (elements.length > 0) {
                 const randomElement = elements[Math.floor(Math.random() * elements.length)];
                 randomElement.classList.add('glitch');
