@@ -3,160 +3,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Guide: Building & Using OpenVPN 3 on Linux Mint</title>
+    <title>COMPLETE GUIDE: Building & Using OpenVPN 3 on Linux Mint</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Ubuntu Mono', monospace;
             line-height: 1.6;
             margin: 0;
             padding: 0;
         }
+        
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: #000000;
+            color: #00ff00;
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            background-image: 
+                linear-gradient(rgba(0, 20, 0, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 20, 0, 0.3) 1px, transparent 1px);
+            background-size: 30px 30px;
+            text-shadow: 0 0 5px #00ff00;
+            position: relative;
+            overflow-x: hidden;
         }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #00ff00, -0.05em -0.025em 0 #ff00ff; }
+            14% { text-shadow: 0.05em 0 0 #00ff00, -0.05em -0.025em 0 #ff00ff; }
+            15% { text-shadow: -0.05em -0.025em 0 #00ff00, 0.025em 0.025em 0 #ff00ff; }
+            49% { text-shadow: -0.05em -0.025em 0 #00ff00, 0.025em 0.025em 0 #ff00ff; }
+            50% { text-shadow: 0.025em 0.05em 0 #00ff00, 0.05em 0 0 #ff00ff; }
+            99% { text-shadow: 0.025em 0.05em 0 #00ff00, 0.05em 0 0 #ff00ff; }
+            100% { text-shadow: -0.025em 0 0 #00ff00, -0.025em -0.025em 0 #ff00ff; }
+        }
+        
+        .glitch {
+            animation: glitch 5s infinite;
+        }
+        
         header {
-            background: linear-gradient(135deg, #2c3e50, #4a6491);
-            color: white;
+            background-color: rgba(0, 20, 0, 0.8);
+            color: #00ff00;
             padding: 2rem;
-            border-radius: 10px;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #00aa00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-        h2 {
-            color: #2c3e50;
-            padding: 1rem 0 0.5rem 0;
-            margin-top: 2rem;
-            border-bottom: 2px solid #4a6491;
-        }
-        h3 {
-            color: #3498db;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        section {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .note, .warning, .success {
-            padding: 1rem;
-            border-left: 5px solid;
-            margin: 1.5rem 0;
-            border-radius: 0 5px 5px 0;
-        }
-        .note {
-            background-color: #e8f4fc;
-            border-left-color: #3498db;
-        }
-        .warning {
-            background-color: #fdf2e9;
-            border-left-color: #e67e22;
-        }
-        .success {
-            background-color: #eafaf1;
-            border-left-color: #27ae60;
-        }
-        pre {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-        code {
-            background-color: #f1f1f1;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-        .command {
-            color: #2ecc71;
+        
+        header::before {
+            content: ">";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #00ff00;
             font-weight: bold;
         }
-        .file-path {
-            color: #e74c3c;
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 0.5rem;
+            position: relative;
         }
-        .flowchart {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
+        
+        h1::before {
+            content: "┌─[";
+            position: absolute;
+            left: -30px;
+            top: 0;
+            color: #00ff00;
+        }
+        
+        h1::after {
+            content: "]─┐";
+            position: absolute;
+            right: -30px;
+            top: 0;
+            color: #00ff00;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #00cc00;
+            font-style: italic;
+            border-left: 3px solid #00ff00;
+            padding-left: 15px;
+            margin-top: 1rem;
+        }
+        
+        h2 {
+            color: #00ffff;
+            padding: 1rem 0 0.5rem 0;
+            margin-top: 2rem;
+            border-bottom: 1px solid #008800;
+            position: relative;
+            font-size: 1.6rem;
+        }
+        
+        h2::before {
+            content: "└─> ";
+            color: #00ff00;
+            margin-right: 10px;
+        }
+        
+        h3 {
+            color: #00ffaa;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        h3::before {
+            content: "$ ";
+            color: #00ff00;
+            margin-right: 5px;
+        }
+        
+        section {
+            background-color: rgba(0, 15, 0, 0.7);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #005500;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+            position: relative;
+        }
+        
+        section::before {
+            content: "[+] ";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .note, .warning, .success {
+            padding: 1.2rem;
             margin: 1.5rem 0;
-            text-align: center;
-            border: 1px dashed #bdc3c7;
+            border: 1px solid;
+            border-left-width: 5px;
+            background-color: rgba(0, 20, 0, 0.5);
         }
+        
+        .note {
+            border-color: #0088ff;
+            border-left-color: #0088ff;
+        }
+        
+        .note::before {
+            content: "[i] ";
+            color: #0088ff;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .warning {
+            border-color: #ff8800;
+            border-left-color: #ff8800;
+        }
+        
+        .warning::before {
+            content: "[!] ";
+            color: #ff8800;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .success {
+            border-color: #00ff00;
+            border-left-color: #00ff00;
+        }
+        
+        .success::before {
+            content: "[√] ";
+            color: #00ff00;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        pre {
+            background-color: #001100;
+            color: #00ff00;
+            padding: 1.5rem;
+            border: 1px solid #004400;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            border-left: 3px solid #00ff00;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
+        }
+        
+        pre::before {
+            content: "┌──(";
+            position: absolute;
+            top: -15px;
+            left: 10px;
+            background-color: #001100;
+            padding: 0 10px;
+            color: #00ff00;
+            font-size: 0.8rem;
+            border: 1px solid #004400;
+            border-bottom: none;
+        }
+        
+        code {
+            background-color: #002200;
+            color: #00ff99;
+            padding: 0.2rem 0.4rem;
+            border: 1px solid #004400;
+            font-size: 0.9rem;
+        }
+        
+        .command {
+            color: #00ffff;
+            font-weight: bold;
+        }
+        
+        .command::before {
+            content: "└─$ ";
+            color: #00ff00;
+            margin-right: 5px;
+        }
+        
+        .file-path {
+            color: #ff8800;
+        }
+        
+        .flowchart {
+            background-color: #001500;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px dashed #008800;
+            text-align: center;
+            color: #00ccff;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
+            border: 1px solid #004400;
         }
+        
         th, td {
             padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #004400;
         }
+        
         th {
-            background-color: #f2f6fc;
-            color: #2c3e50;
+            background-color: #002200;
+            color: #00ffff;
             font-weight: 600;
         }
-        tr:hover {
-            background-color: #f9f9f9;
+        
+        td {
+            background-color: #001100;
+            color: #00ff99;
         }
+        
+        tr:hover td {
+            background-color: #002a00;
+            color: #00ff00;
+        }
+        
         footer {
             text-align: center;
             margin-top: 3rem;
             padding: 1.5rem;
-            color: #7f8c8d;
+            color: #008800;
             font-size: 0.9rem;
-            border-top: 1px solid #ecf0f1;
+            border-top: 1px solid #004400;
         }
+        
         .step-number {
             display: inline-block;
-            background-color: #3498db;
-            color: white;
+            background-color: #002200;
+            color: #00ff00;
             width: 28px;
             height: 28px;
-            border-radius: 50%;
+            border-radius: 0;
             text-align: center;
             line-height: 28px;
             margin-right: 10px;
             font-weight: bold;
+            border: 1px solid #008800;
+        }
+        
+        a {
+            color: #00ccff;
+            text-decoration: none;
+            border-bottom: 1px dotted #0088ff;
+        }
+        
+        a:hover {
+            color: #00ffff;
+            border-bottom: 1px solid #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+            margin: 1rem 0;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+            color: #00cc00;
+        }
+        
+        li::marker {
+            color: #00ff00;
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .cursor::after {
+            content: "▌";
+            animation: blink 1s infinite;
+            color: #00ff00;
+            margin-left: 2px;
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #00ff00;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #00ff00; }
+        }
+        
+        .matrix-line {
+            position: absolute;
+            color: #00ff00;
+            font-size: 14px;
+            opacity: 0;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to bottom, transparent 0%, #00ff00 50%, transparent 100%);
+            opacity: 0.1;
+            animation: scan 5s linear infinite;
+            z-index: 999;
+            pointer-events: none;
+        }
+        
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        
+        .terminal-header {
+            background: linear-gradient(to right, #001100, #003300);
+            padding: 5px 15px;
+            border-bottom: 1px solid #00aa00;
+            color: #00ff00;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        
+        .terminal-button.close { background-color: #ff5555; }
+        .terminal-button.minimize { background-color: #ffaa00; }
+        .terminal-button.maximize { background-color: #00cc00; }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            pre {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+            
+            section {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="scanline"></div>
+    
     <header>
-        <h1>Complete Guide: Building & Using OpenVPN 3 on Linux Mint</h1>
-        <p class="subtitle">From source compilation to VPN connection - A comprehensive tutorial based on real troubleshooting experience</p>
+        <h1 class="glitch">COMPLETE GUIDE: Building & Using OpenVPN 3 on Linux Mint</h1>
+        <p class="subtitle typewriter">From source compilation to VPN connection - A comprehensive tutorial based on real troubleshooting experience<span class="blink">_</span></p>
     </header>
 
     <section id="overview">
-        <h2>📋 Project Overview</h2>
+        <h2>📋 PROJECT OVERVIEW</h2>
         <p>This guide documents the complete process of building OpenVPN 3 Linux client from source on Linux Mint and connecting to free VPN services. Unlike standard OpenVPN 2.x, OpenVPN 3 features a modular architecture with privilege separation and built-in configuration management.</p>
         
         <div class="note">
-            <strong>What You'll Learn:</strong>
+            <strong>WHAT YOU'LL LEARN:</strong>
             <ul>
                 <li>Building complex software from source on Linux</li>
                 <li>Managing dependencies and resolving compilation errors</li>
@@ -166,7 +488,7 @@
             </ul>
         </div>
         
-        <h3>System Context</h3>
+        <h3>SYSTEM CONTEXT</h3>
         <ul>
             <li><strong>Operating System:</strong> Linux Mint 22 "Zara" (based on Ubuntu 24.04 "Noble")</li>
             <li><strong>Architecture:</strong> x86_64 (standard 64-bit)</li>
@@ -176,7 +498,7 @@
     </section>
 
     <section id="prerequisites">
-        <h2>⚙️ Prerequisites & Initial Setup</h2>
+        <h2>⚙️ PREREQUISITES & INITIAL SETUP</h2>
         
         <h3><span class="step-number">1</span> Verify Your Linux Mint Version</h3>
         <p>OpenVPN repositories use Ubuntu codenames. Linux Mint "Zara" is based on Ubuntu "Noble" (24.04):</p>
@@ -190,11 +512,11 @@
 sudo apt install build-essential git pkg-config meson ninja-build curl</code></pre>
         
         <div class="note">
-            <strong>Why These Tools Matter:</strong>
+            <strong>WHY THESE TOOLS MATTER:</strong>
             <ul>
                 <li><code>build-essential</code>: Meta-package for C/C++ compilation (gcc, g++, make, etc.)</li>
                 <li><code>git</code>: Version control to clone repositories</li>
-                <li><code>pkg-config</code:> Helper tool to find library dependencies</li>
+                <li><code>pkg-config</code>: Helper tool to find library dependencies</li>
                 <li><code>meson</code> & <code>ninja-build</code>: Modern build system and its backend</li>
                 <li><code>curl</code>: Command-line tool for transferring data with URLs</li>
             </ul>
@@ -202,10 +524,10 @@ sudo apt install build-essential git pkg-config meson ninja-build curl</code></p
     </section>
 
     <section id="building-openvpn3">
-        <h2>🔨 Building OpenVPN 3 from Source</h2>
+        <h2>🔨 BUILDING OPENVPN 3 FROM SOURCE</h2>
         
         <div class="warning">
-            <strong>Important:</strong> The OpenVPN 3 build process has several tricky dependencies. We'll encounter and solve multiple errors step by step.
+            <strong>IMPORTANT:</strong> The OpenVPN 3 build process has several tricky dependencies. We'll encounter and solve multiple errors step by step.
         </div>
         
         <h3><span class="step-number">1</span> Clone the Source Repository</h3>
@@ -224,7 +546,7 @@ libsystemd-dev python3-systemd libssl-dev libdbus-1-dev</code></pre>
         <p>When running <code>meson setup</code>, the build fails because <code>gdbuspp</code> is not in standard repositories. This C++ D-Bus library is essential for OpenVPN 3's service architecture.</p>
         
         <div class="flowchart">
-            <strong>Build Failure Detected:</strong> "Dependency 'gdbuspp' not found, tried pkgconfig"
+            <strong>BUILD FAILURE DETECTED:</strong> "Dependency 'gdbuspp' not found, tried pkgconfig"
         </div>
         
         <h4>Solution: Build gdbuspp from Source</h4>
@@ -236,7 +558,7 @@ meson compile -C _build
 sudo meson install -C _build</code></pre>
         
         <div class="note">
-            <strong>Understanding the Fix:</strong> We install to <code>/usr/local</code> (standard for locally built software). The library installs its pkg-config file to <code>/usr/local/lib/pkgconfig/gdbuspp.pc</code>, which <code>pkg-config</code> needs to find.
+            <strong>UNDERSTANDING THE FIX:</strong> We install to <code>/usr/local</code> (standard for locally built software). The library installs its pkg-config file to <code>/usr/local/lib/pkgconfig/gdbuspp.pc</code>, which <code>pkg-config</code> needs to find.
         </div>
         
         <h3><span class="step-number">4</span> Missing Submodules</h3>
@@ -277,14 +599,14 @@ meson compile -C _builddir
 sudo meson install -C _builddir</code></pre>
         
         <div class="success">
-            <strong>Verification:</strong> After successful installation, verify OpenVPN 3 is working:
+            <strong>VERIFICATION:</strong> After successful installation, verify OpenVPN 3 is working:
             <pre><code>openvpn3 --version
 openvpn2 --help</code></pre>
         </div>
     </section>
 
     <section id="vpn-connection">
-        <h2>🔗 Connecting to Free VPN Services</h2>
+        <h2>🔗 CONNECTING TO FREE VPN SERVICES</h2>
         
         <p>With OpenVPN 3 installed, you need a VPN configuration file (.ovpn) from a provider. We explore two free options:</p>
         
@@ -343,7 +665,7 @@ openvpn3 session-start --config downloaded-file.ovpn
 # Credentials: vpn / vpn</code></pre>
         
         <div class="note">
-            <strong>Verifying Your Connection:</strong>
+            <strong>VERIFYING YOUR CONNECTION:</strong>
             <ul>
                 <li><code>curl ifconfig.me</code> - Shows your public IP (should be VPN server's IP)</li>
                 <li><code>ping 8.8.8.8</code> - Tests basic connectivity through VPN</li>
@@ -353,7 +675,7 @@ openvpn3 session-start --config downloaded-file.ovpn
     </section>
 
     <section id="session-management">
-        <h2>🛠️ OpenVPN 3 Session Management</h2>
+        <h2>🛠️ OPENVPN 3 SESSION MANAGEMENT</h2>
         
         <p>OpenVPN 3 uses a different command structure than OpenVPN 2.x. Here's the essential command reference:</p>
         
@@ -410,7 +732,7 @@ openvpn3 session-start --config VPNBook</code></pre>
     </section>
 
     <section id="troubleshooting">
-        <h2>🐛 Comprehensive Troubleshooting Guide</h2>
+        <h2>🐛 COMPREHENSIVE TROUBLESHOOTING GUIDE</h2>
         
         <h3>Build Issues</h3>
         
@@ -439,12 +761,12 @@ openvpn3 session-start --config VPNBook</code></pre>
         <p><strong>Solution:</strong> Use <code>session-manage --config NAME --disconnect</code> instead.</p>
         
         <div class="warning">
-            <strong>Remember:</strong> The terminal window running <code>openvpn3 session-start</code> must remain open to maintain the VPN connection. Closing it terminates the VPN tunnel.
+            <strong>REMEMBER:</strong> The terminal window running <code>openvpn3 session-start</code> must remain open to maintain the VPN connection. Closing it terminates the VPN tunnel.
         </div>
     </section>
 
     <section id="concepts">
-        <h2>🧠 Key Concepts Explained</h2>
+        <h2>🧠 KEY CONCEPTS EXPLAINED</h2>
         
         <h3>Why Build from Source?</h3>
         <p>Building from source gives you:</p>
@@ -494,9 +816,103 @@ openvpn3 session-start --config VPNBook</code></pre>
     </section>
 
     <footer>
+        <p>root@mint:~# <span class="blink">_</span></p>
         <p>This guide documents a real-world OpenVPN 3 build and configuration process on Linux Mint.</p>
         <p>Based on troubleshooting session completed on Linux Mint 22 "Zara" (Ubuntu 24.04 "Noble" base).</p>
         <p>Commands and solutions were tested and verified through actual implementation.</p>
     </footer>
+
+    <script>
+        // Create matrix rain effect
+        function createMatrixRain() {
+            const chars = "01abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~";
+            const container = document.createElement('div');
+            container.className = 'matrix-rain';
+            document.body.appendChild(container);
+            
+            const fontSize = 14;
+            const columns = Math.floor(window.innerWidth / fontSize);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-line';
+                column.style.left = `${i * fontSize}px`;
+                column.style.top = `${-Math.random() * 100}px`;
+                column.style.animationDuration = `${Math.random() * 5 + 3}s`;
+                column.style.animationDelay = `${Math.random() * 2}s`;
+                
+                // Create random characters
+                let text = '';
+                const length = Math.floor(Math.random() * 20) + 10;
+                for (let j = 0; j < length; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)];
+                }
+                column.textContent = text;
+                
+                container.appendChild(column);
+            }
+        }
+        
+        // Add terminal cursor effect to code blocks
+        function addCursorEffect() {
+            const preElements = document.querySelectorAll('pre');
+            preElements.forEach(pre => {
+                const lastLine = pre.querySelector('code');
+                if (lastLine) {
+                    // Remove existing cursor spans
+                    const existingCursor = lastLine.querySelector('.cursor');
+                    if (existingCursor) existingCursor.remove();
+                    
+                    // Add cursor to the end
+                    const cursorSpan = document.createElement('span');
+                    cursorSpan.className = 'cursor';
+                    lastLine.appendChild(cursorSpan);
+                }
+            });
+        }
+        
+        // Add typewriter effect to headers
+        function addTypewriterEffect() {
+            const headers = document.querySelectorAll('h1, h2, h3');
+            headers.forEach(header => {
+                if (!header.classList.contains('typewriter')) {
+                    header.classList.add('typewriter');
+                }
+            });
+        }
+        
+        // Initialize effects when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixRain();
+            addCursorEffect();
+            addTypewriterEffect();
+            
+            // Update cursor position periodically
+            setInterval(addCursorEffect, 1000);
+            
+            // Add click effects to code blocks
+            const codeBlocks = document.querySelectorAll('pre');
+            codeBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    this.style.boxShadow = 'inset 0 0 20px rgba(0, 255, 0, 0.3)';
+                    setTimeout(() => {
+                        this.style.boxShadow = 'inset 0 0 10px rgba(0, 255, 0, 0.1)';
+                    }, 300);
+                });
+            });
+        });
+        
+        // Add glitch effect randomly
+        setInterval(() => {
+            const elements = document.querySelectorAll('h1, h2, h3, .command');
+            if (elements.length > 0) {
+                const randomElement = elements[Math.floor(Math.random() * elements.length)];
+                randomElement.classList.add('glitch');
+                setTimeout(() => {
+                    randomElement.classList.remove('glitch');
+                }, 200);
+            }
+        }, 5000);
+    </script>
 </body>
 </html>
